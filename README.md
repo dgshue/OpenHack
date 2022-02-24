@@ -15,4 +15,4 @@ https://docs.microsoft.com/en-us/azure/aks/cluster-container-registry-integratio
 | ------------- | --------      | ----------------  |
 | openhack      | SQL_USER      | SQL User Account  |
 | openhack      | SQL_PASSWORD  | SQL Password      |
-| openhack      | SQL_SERVER    | SQL Server FQD    |
+| openhack      | SQL_SERVER    | SQL Server FQDN   |
