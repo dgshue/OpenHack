@@ -20,7 +20,12 @@ docker push registryhuz5030.azurecr.io/trips
 AKS CLI Commands
 
 ```console
+
+az aks get-credentials --admin --name HackClusterPrivate --resource-group teamResources
+
 az aks update -n HackCluster -g teamResources --attach-acr registryhuz5030
+
+
 ```
 
 Other Commands
