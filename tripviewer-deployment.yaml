@@ -2,6 +2,7 @@ apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and befor
 kind: Deployment
 metadata:
   name: tripviewer
+  namespace: frontend
 spec:
   selector:
     matchLabels:
@@ -24,7 +25,7 @@ spec:
         - name: USERPROFILE_API_ENDPOINT
           value: "http://userprofile"
         ports:
-        - containerPort: 8080
+        - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
@@ -35,5 +36,5 @@ spec:
     app: tripviewer
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: 80
   type: LoadBalancer
