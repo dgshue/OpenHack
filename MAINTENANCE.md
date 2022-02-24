@@ -17,6 +17,12 @@ docker push registryhuz5030.azurecr.io/tripviewer
 docker push registryhuz5030.azurecr.io/userprofile 
 docker push registryhuz5030.azurecr.io/trips
 ```
+AKS CLI Commands
+
+```console
+az aks update -n HackCluster -g teamResources --attach-acr registryhuz5030
+```
+
 Other Commands
 
 ```console
@@ -36,4 +42,5 @@ GO
 docker run --network openhack -e SQLFQDN=changeme.database.windows.net -e SQLUSER="sa" -e SQLPASS='Str0ngPa$$w0rd' -e SQLDB=mydrivingDB registryhuz5030.azurecr.io/dataload:1.0
 
 docker run  -p 8080:80 --network openhack --name poi poi
+
 ```
