@@ -32,7 +32,8 @@ $AKS_ID=$(az aks show -g teamResources -n HackClusterPrivate --query id -o tsv)
 az role assignment create --role "Azure Kubernetes Service RBAC Reader" --assignee apidev@msftopenhack6971ops.onmicrosoft.com --scope $AKS_ID/namespaces/frontend
 az role assignment create --role "Azure Kubernetes Service RBAC Writer" --assignee apidev@msftopenhack6971ops.onmicrosoft.com --scope $AKS_ID/namespaces/backend
 
-
+az vmss identity assign -g MC_teamResources_HackClusterPrivate_westus -n aks-agentpool-28866457-vmss
+az vmss identity show -g MC_teamResources_HackClusterPrivate_westus -n aks-agentpool-28866457-vmss -o yaml
 
 ```
 
@@ -42,6 +43,8 @@ Kubectl Commands
 
 kubectl get pods -n <namespace>
 kubectl exec --stdin --tty <podname> -n <namespace> -- /bin/sh
+
+kubectl rollout restart deployment -n backend trips
 
 ```
 
