@@ -42,6 +42,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: userprofile
+  namespace: backend
   labels:
     app: userprofile
     tier: backend
