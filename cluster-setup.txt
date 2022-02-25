@@ -1,0 +1,60 @@
+# Add the ingress-nginx repository
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+
+# Set variable for ACR location to use for pulling images
+ACR_URL=registryhuz5030.azurecr.io
+
+# Use Helm to deploy an NGINX ingress controller
+helm install nginx-ingress ingress-nginx/ingress-nginx \
+    --version 4.0.13 \
+    --namespace ingress-basic --create-namespace \
+    --set controller.replicaCount=2 \
+    --set controller.nodeSelector."kubernetes\.io/os"=linux \
+    --set controller.image.registry=$ACR_URL \
+    --set controller.image.image=$CONTROLLER_IMAGE \
+    --set controller.image.tag=$CONTROLLER_TAG \
+    --set controller.image.digest="" \
+    --set controller.admissionWebhooks.patch.nodeSelector."kubernetes\.io/os"=linux \
+    --set controller.admissionWebhooks.patch.image.registry=$ACR_URL \
+    --set controller.admissionWebhooks.patch.image.image=$PATCH_IMAGE \
+    --set controller.admissionWebhooks.patch.image.tag=$PATCH_TAG \
+    --set controller.admissionWebhooks.patch.image.digest="" \
+    --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux \
+    --set defaultBackend.image.registry=$ACR_URL \
+    --set defaultBackend.image.image=$DEFAULTBACKEND_IMAGE \
+    --set defaultBackend.image.tag=$DEFAULTBACKEND_TAG \
+    --set defaultBackend.image.digest=""
+
+
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/cloud/deploy.yaml
+
+namespace/ingress-nginx created
+serviceaccount/ingress-nginx created
+configmap/ingress-nginx-controller created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+role.rbac.authorization.k8s.io/ingress-nginx created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+service/ingress-nginx-controller-admission created
+service/ingress-nginx-controller created
+deployment.apps/ingress-nginx-controller created
+ingressclass.networking.k8s.io/nginx created
+validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
+serviceaccount/ingress-nginx-admission created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+role.rbac.authorization.k8s.io/ingress-nginx-admission created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+job.batch/ingress-nginx-admission-create created
+job.batch/ingress-nginx-admission-patch created
+
+kubectl --namespace ingress-nginx get services -o wide -w ingress-nginx-controller
+
+NAME                       TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)                      AGE     SELECTOR
+ingress-nginx-controller   LoadBalancer   10.0.132.253   40.78.88.224   80:30700/TCP,443:31979/TCP   7m50s   app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
+
+
+
+kubectl apply -f aks-helloworld-one.yaml --namespace ingress-basic
+kubectl apply -f aks-helloworld-two.yaml --namespace ingress-basic
