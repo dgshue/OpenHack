@@ -22,9 +22,26 @@ AKS CLI Commands
 ```console
 
 az aks get-credentials --admin --name HackClusterPrivate --resource-group teamResources
+az aks get-credentials --name HackClusterPrivate --resource-group teamResources
 
 az aks update -n HackCluster -g teamResources --attach-acr registryhuz5030
 
+
+$AKS_ID=$(az aks show -g teamResources -n HackClusterPrivate --query id -o tsv)
+
+az role assignment create --role "Azure Kubernetes Service RBAC Reader" --assignee apidev@msftopenhack6971ops.onmicrosoft.com --scope $AKS_ID/namespaces/frontend
+az role assignment create --role "Azure Kubernetes Service RBAC Writer" --assignee apidev@msftopenhack6971ops.onmicrosoft.com --scope $AKS_ID/namespaces/backend
+
+
+
+```
+
+Kubectl Commands
+
+```console
+
+kubectl get pods -n <namespace>
+kubectl exec --stdin --tty <podname> -n <namespace> -- /bin/sh
 
 ```
 

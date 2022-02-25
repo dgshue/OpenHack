@@ -19,28 +19,24 @@ spec:
       - name: user-java
         image: registryhuz5030.azurecr.io/user-java:latest  # or just image: redis
         resources:
+        volumeMounts:
+        - name: secrets-store01-inline
+          mountPath: "/secrets"
+          readOnly: true
         env:
-        - name: SQL_USER
-          valueFrom:
-            secretKeyRef:
-              name: openhack
-              key: SQL_USER 
-        - name: SQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: openhack
-              key: SQL_PASSWORD
-        - name: SQL_SERVER
-          valueFrom:
-            secretKeyRef:
-              name: openhack
-              key: SQL_SERVER 
         - name: PORT
           value: "80"
         - name: CONFIG_FILES_PATH
           value: "/secrets"
         ports:
         - containerPort: 80
+      volumes:
+      - name: secrets-store01-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "azure-kvname-system-msi"
 ---
 apiVersion: v1
 kind: Service
